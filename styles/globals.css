@@ -3,5 +3,8 @@
 @tailwind utilities;
 
 @layer base {
-  html, body { @apply text-[#4E565F] lining-nums; }
+  html, body, input, select, option { @apply text-[#4E565F] lining-nums text-[18px] leading-[27px] lg:text-[20px] lg:leading-[46px]; }
+  input, select, option, textarea { @apply border text-[18px] leading-none p-[10px] w-full rounded-sm border-[#BBBBBB]; }
+  input { @apply py-[11px]; }
+  /* input, select, option { @apply border border-[#BBBBBB] rounded p-[10px] text-[18px] leading-normal h-fit; } */
 }
