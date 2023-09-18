@@ -1,14 +1,14 @@
 'use client'
 
 import { useState } from "react"
-import ReCAPTCHA from 'react-google-recaptcha'
 
 export default function ContactForm() {
   const [submitted, setSubmitted] = useState(false)
+  const [loading, setLoading] = useState(false)
 
-  const recaptchaSiteKey = process.env.NEXT_PUBLIC_GOOGLE_RECAPTCHA_CLIENT_KEY
-  const [verified, setVerified] = useState(false)
-  const [verifyError, setVerifyError] = useState('')
+  //const recaptchaSiteKey = process.env.NEXT_PUBLIC_GOOGLE_RECAPTCHA_CLIENT_KEY
+  //const [verified, setVerified] = useState(false)
+  //const [verifyError, setVerifyError] = useState('')
 
   if (submitted) {
     return (
@@ -24,9 +24,9 @@ export default function ContactForm() {
         onSubmit={event => {
           event.preventDefault()
 
-          // if (!verified) return setVerifyError('Please verify that you are human.')
+          setLoading(true)
 
-          // setVerifyError('')
+          if (event.target.address.value != '') return
 
           fetch('/api/contact', {
             method: 'POST',
@@ -40,12 +40,13 @@ export default function ContactForm() {
           })
           .then(response => response.json())
           .then(response => {
-            console.log('response', response)
-            
+            if (response.success) {
+              setSubmitted(true)
+            }
+
+            setLoading(false)
           })
           .catch(error => console.error('error', error))
-          // console.log('submit')
-          // setSubmitted(true)
         }}
         className="bg-white p-5 lg:p-12 flex flex-col gap-10 leading-normal text-lg rounded shadow"
       >
@@ -101,16 +102,11 @@ export default function ContactForm() {
             rows="4"
           />
         </div>
-        <div>
-          {verifyError && <p className="text-red-700 font-medium inline">{verifyError}</p>}
-          <ReCAPTCHA
-            sitekey={recaptchaSiteKey}
-            onChange={value => setVerified(value ? true : false)}
-            size="compact"
-          />
+        <div className="hidden">
+          <input htmlFor="address" />
         </div>
-        <button className="border border-[#EF7206] text-[#EF7206] hover:bg-[#EF7206] hover:text-white text-center px-1 lg:px-24 py-3 rounded-full lg:w-fit lg:mx-auto font-bold text-lg">
-          Submit
+        <button className="border border-[#EF7206] text-[#EF7206] hover:bg-[#EF7206] disabled:bg-[#EF7206] disabled:text-white hover:text-white text-center px-1 lg:px-24 py-3 rounded-full lg:w-1/2 lg:mx-auto font-bold text-lg" disabled={loading}>
+          {loading ? <img src="/img/loading.png" width={32} height={32} alt="loading" className="mx-auto animate-spin animate" /> : "Submit"}
         </button>
       </form>
     )
