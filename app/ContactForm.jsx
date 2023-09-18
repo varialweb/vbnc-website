@@ -103,7 +103,7 @@ export default function ContactForm() {
           />
         </div>
         <div className="hidden">
-          <input htmlFor="address" />
+          <input name="address" id="address" />
         </div>
         <button className="border border-[#EF7206] text-[#EF7206] hover:bg-[#EF7206] disabled:bg-[#EF7206] disabled:text-white hover:text-white text-center px-1 lg:px-24 py-3 rounded-full lg:w-1/2 lg:mx-auto font-bold text-lg" disabled={loading}>
           {loading ? <img src="/img/loading.png" width={32} height={32} alt="loading" className="mx-auto animate-spin animate" /> : "Submit"}
